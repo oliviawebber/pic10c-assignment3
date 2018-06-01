@@ -59,28 +59,26 @@ class RingQueue{
 
             public:
                 reference operator*() {
-                    // Replace the line(s) below with your code.
-                    return parent->buffer[0] ;  
+                    return parent->buffer[parent->begin_index + offset];  
                 }
 
                 iterator& operator++(){
-                    // Replace the line(s) below with your code.
+                    ++offset;
                     return *this;
                 }
 
                 iterator operator++( int unused ){
-                    // Replace the line(s) below with your code.
-                    return *this;
+                    auto copy_it = *this;
+                    ++(*this);
+                    return copy_it;
                 }
 
                 bool operator==( const iterator& rhs ) const {
-                    // Replace the line(s) below with your code.
-                    return true;
+                    return !(*this != rhs);
                 }
 
                 bool operator!=( const iterator& rhs ) const {
-                    // Replace the line(s) below with your code.
-                    return true;
+                    return (this->parent != rhs.parent) || (this->offset != rhs.offset);
                 }
 
         };

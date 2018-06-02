@@ -93,7 +93,8 @@ class RingQueue{
 
             private:
                 // Only RingQueue objects can create const_iterators...
-                const_iterator() ;
+                const_iterator(RingQueue* _parent, int _offset = 0 ) : 
+                    parent(_parent), offset(_offset);
 
             public:
                 // ... however, const_iterators can be 'copied'.
@@ -102,7 +103,7 @@ class RingQueue{
             friend class RingQueue<ItemType,MAX_SIZE>;
         };
         */
-
+        
 
 
     // Friendship goes both ways here.
@@ -231,13 +232,13 @@ int main(){
     // implementation of RingQueue<ItemType,int>::end(). 
     // If the implementation is not correct, it might result in 
     // an infinite loop.
-    /** 
+    
     std::cout << "Queue via iterators: \n";
     for ( auto it = rq.begin() ; it != rq.end() ; ++it ) {
         std::cout << "Value: " << *it << ", address: " << &(*it) << '\n';
     }
     std::cout << '\n';
-    */
+    
 
 
 

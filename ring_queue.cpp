@@ -104,26 +104,26 @@ class RingQueue{
             friend class RingQueue<ItemType,MAX_SIZE>;
 
             public:
-                ItemType operator*() {
+                const reference operator*() {
                     return parent->buffer[(parent->begin_index + offset) % MAX_SIZE];  
                 }
 
-                iterator& operator++(){
+                const_iterator& operator++(){
                     ++offset;
                     return *this;
                 }
 
-                iterator operator++( int unused ){
+                const_iterator operator++( int unused ){
                     auto copy_it = *this;
                     ++(*this);
                     return copy_it;
                 }
 
-                bool operator==( const iterator& rhs ) const {
+                bool operator==( const const_iterator& rhs ) const {
                     return !(*this != rhs);
                 }
 
-                bool operator!=( const iterator& rhs ) const {
+                bool operator!=( const const_iterator& rhs ) const {
                     return (this->parent != rhs.parent) || (this->offset != rhs.offset);
                 }            
         };
@@ -215,6 +215,14 @@ class RingQueue{
             return iterator(this,ring_size);
         }
 
+         // Functions that return const iterators
+        const_iterator cbegin() { 
+            return const_iterator(this,0); 
+        }
+        const_iterator cend() {
+            return const_iterator(this,ring_size);
+        }
+
         // Miscellaneous functions
         size_t size() const {
             return ring_size;
@@ -259,7 +267,7 @@ int main(){
     // an infinite loop.
     
     std::cout << "Queue via iterators: \n";
-    for ( auto it = rq.begin() ; it != rq.end() ; ++it ) {
+    for ( auto it = rq.cbegin() ; it != rq.cend() ; ++it ) {
         std::cout << "Value: " << *it << ", address: " << &(*it) << '\n';
     }
     std::cout << '\n';

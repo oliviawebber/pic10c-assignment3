@@ -267,7 +267,7 @@ int main(){
     // an infinite loop.
     
     std::cout << "Queue via iterators: \n";
-    for ( auto it = rq.cbegin() ; it != rq.cend() ; ++it ) {
+    for ( auto it = rq.begin() ; it != rq.end() ; ++it ) {
         std::cout << "Value: " << *it << ", address: " << &(*it) << '\n';
     }
     std::cout << '\n';

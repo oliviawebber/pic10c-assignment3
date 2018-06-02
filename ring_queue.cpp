@@ -85,7 +85,7 @@ class RingQueue{
 
 
 
-        /**
+        
         class const_iterator{
             private:
                 RingQueue* parent;
@@ -93,22 +93,47 @@ class RingQueue{
 
             private:
                 // Only RingQueue objects can create const_iterators...
-                const_iterator(RingQueue* _parent, int _offset = 0 ) : 
-                    parent(_parent), offset(_offset);
+                const_iterator(RingQueue* _parent, int _offset = 0 )  
+                    : parent(_parent), offset(_offset) {}
 
             public:
                 // ... however, const_iterators can be 'copied'.
-                const_iterator( const const_iterator& ) ;
+                const_iterator( const const_iterator& it)
+                    : parent(it.parent), offset(it.offset) {} 
 
             friend class RingQueue<ItemType,MAX_SIZE>;
+
+            public:
+                ItemType operator*() {
+                    return parent->buffer[(parent->begin_index + offset) % MAX_SIZE];  
+                }
+
+                iterator& operator++(){
+                    ++offset;
+                    return *this;
+                }
+
+                iterator operator++( int unused ){
+                    auto copy_it = *this;
+                    ++(*this);
+                    return copy_it;
+                }
+
+                bool operator==( const iterator& rhs ) const {
+                    return !(*this != rhs);
+                }
+
+                bool operator!=( const iterator& rhs ) const {
+                    return (this->parent != rhs.parent) || (this->offset != rhs.offset);
+                }            
         };
-        */
+        
         
 
 
     // Friendship goes both ways here.
     friend class iterator;
-    // friend class const_iterator;  // not implemented... yet.
+    friend class const_iterator;  // not implemented... yet.
 
 
 

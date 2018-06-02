@@ -59,7 +59,7 @@ class RingQueue{
 
             public:
                 reference operator*() {
-                    return parent->buffer[parent->begin_index + offset];  
+                    return parent->buffer[(parent->begin_index + offset) % MAX_SIZE];  
                 }
 
                 iterator& operator++(){
@@ -129,8 +129,7 @@ class RingQueue{
         // A helper function that computes the index of 'the end'
         // of the RingQueue
         int end_index() const {
-            // Replace the line(s) below with your code.
-            return begin_index;
+            return (begin_index + ring_size) % MAX_SIZE;
         }
 
 
@@ -146,8 +145,7 @@ class RingQueue{
             // Feel free to throw instead...
             
             
-            // Replace the line(s) below with your code.
-            return buffer[0];
+            return buffer[begin_index];
         }
         ItemType back() const {  
             if ( ring_size == 0 ) std::cerr<< "Warning: Empty ring!\n" ;
@@ -155,34 +153,45 @@ class RingQueue{
             // Feel free to throw instead...
             
             
-            // Replace the line(s) below with your code.
-            return buffer[0]; 
+            return buffer[end_index()];
         }
 
 
 
         // Mutators
         void push_back( const ItemType& value ){
+            buffer[end_index()] = value;
+            if(ring_size < MAX_SIZE)
+                ++ring_size;
+            else
+                ++begin_index;
+            if(begin_index == MAX_SIZE)
+                begin_index = 0;
             return;
         }
         void pop_front(){
+            if(ring_size == 0) {
+                std::cerr << "Warning: Trying to pop empty ring.\n";
+                return;
+            }    
+            --ring_size;
+            ++begin_index;
+            if(begin_index == MAX_SIZE)
+                begin_index = 0;
             return;
         }
 
         // Functions that return iterators
         iterator begin() { 
-            // Replace the line(s) below with your code.
             return iterator(this,0); 
         }
         iterator end() {
-            // Replace the line(s) below with your code.
-            return iterator(this,0);
+            return iterator(this,ring_size);
         }
 
         // Miscellaneous functions
         size_t size() const {
-            // Replace the line(s) below with your code.
-            return 0;
+            return ring_size;
         }
 
         // Debugging functions
